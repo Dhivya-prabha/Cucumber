@@ -26,6 +26,8 @@ public class LoginMultiple {
 	}
 
 	@Given("Enter username as (.*)$")
+	//If we use same step definition for more than one step from feature file, we have to pass 
+	//the arguments as (.*)$ because passing data during run time will accept only this format
 	public void enter_username_as(String uName) {
 		WebElement username = driver.findElement(By.xpath("//input[@id = 'username']"));
 		username.sendKeys(uName);
@@ -63,3 +65,4 @@ public class LoginMultiple {
 	}
 	
 }
+
