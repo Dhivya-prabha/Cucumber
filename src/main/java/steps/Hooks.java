@@ -9,22 +9,38 @@ import steps.Baseclass;
 
 public class Hooks extends Baseclass{
 
+int i =1;
+	
 	@Before
-	public void precondition() {
-		WebDriverManager.chromedriver().setup();
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.get("http://leaftaps.com/opentaps/");
-		driver.findElementById("username").sendKeys("demosalesmanager");
-		driver.findElementById("password").sendKeys("crmsfa");
-		driver.findElementByClassName("decorativeSubmit").click();
-		driver.findElementByLinkText("CRM/SFA").click();
-		driver.findElementByLinkText("Leads").click();
+	public void launch() {
+		ChromeOptions options  = new ChromeOptions();
+		options.addArguments("--disable-save-password-bubble");
+		options.addArguments("--disable-notifications");
+		options.addArguments("--disable-popup-blocking");			
+		options.addArguments("--guest");
 
+		driver = new ChromeDriver(options);
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 	}
+
 	@After
-	public void postcondition() {
+	public void close() {
 		driver.close();
 	}
+
+
+	@BeforeStep
+	public void report() {
+		System.out.println("Going to run a step");
 	}
+	@AfterStep
+	public void takeSnap() throws IOException {
+		File file = driver.getScreenshotAs(OutputType.FILE);
+		FileUtils.copyFile(file, new File("./images/snap"+(i++)+".jpg"));
+
+	}
+
+}
 
